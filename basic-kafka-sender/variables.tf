@@ -15,7 +15,7 @@ variable "url" {
 
 variable "msg_vpn_name" {
   type    = string
-  default = "vpn4"
+  default = "default"
 }
 
 variable "kafka_sender_name" {
