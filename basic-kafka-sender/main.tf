@@ -19,6 +19,7 @@ resource "solacebroker_msg_vpn_kafka_sender" "kafka_sender_1" {
   kafka_sender_name      = var.kafka_sender_name
   msg_vpn_name           = var.msg_vpn_name
   authentication_scheme  = "none"
+  transport_tls_enabled  = false
 
 }
 
