@@ -40,7 +40,7 @@ variable "kafka_receiver_topic_binding_initial_offset" {
 
 variable "kafka_receiver_topic_binding_local_topic" {
   type    = string
-  default = "kafka/$${kafkaTopic()}"
+  default = "kafka/received/$${kafkaTopic()}"
 }
 
 variable "queue_name" {
@@ -50,5 +50,5 @@ variable "queue_name" {
 
 variable "queue_q_kafka_message_topic_subscription" {
   type    = string
-  default = "kafka/>"
+  default = "kafka/received/>"
 }

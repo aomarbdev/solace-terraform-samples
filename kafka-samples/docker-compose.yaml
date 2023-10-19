@@ -1,0 +1,106 @@
+version: "2.1"
+services:
+  #Solace
+  primary:
+    container_name: solacePubSubStandardSingleNode
+    image: solace/solace-pubsub-standard:latest
+    shm_size: 1g
+    ulimits:
+      core: 1
+      nofile:
+        soft: 2448
+        hard: 6592
+    deploy:
+      resources:
+        limits:
+          memory: 6000m
+      restart_policy:
+        condition: on-failure
+        max_attempts: 1
+    ports:
+      #Port Mappings:  Ports are mapped straight through from host to
+      #container.  This may result in port collisions on commonly used
+      #ports that will cause failure of the container to start.
+      #Web transport
+      - "8008:8008"
+      #Web transport over TLS
+      - "1443:1443"
+      #SEMP over TLS
+      - "1943:1943"
+      #MQTT Default VPN
+      - "1883:1883"
+      #AMQP Default VPN over TLS
+      - "5671:5671"
+      #AMQP Default VPN
+      - "5672:5672"
+      #MQTT Default VPN over WebSockets
+      - "8009:8000"
+      #MQTT Default VPN over WebSockets / TLS
+      - "8442:8443"
+      #MQTT Default VPN over TLS
+      - "8883:8883"
+      #SEMP / PubSub+ Manager
+      - "8080:8080"
+      #REST Default VPN
+      - "9000:9000"
+      #REST Default VPN over TLS
+      - "9443:9443"
+      #SMF
+      - "55554:55555"
+      #SMF Compressed
+      - "55003:55003"
+      #SMF over TLS
+      - "55443:55443"
+      #SSH connection to CLI
+      - "2222:2222"
+    environment:
+      - username_admin_globalaccesslevel=admin
+      - username_admin_password=admin
+      - system_scaling_maxconnectioncount=1000
+
+  # Kafka
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+
+  zookeeper-2:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 32181:2181
+
+  kafka-1:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  kafka-2:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+    ports:
+      - 39092:39092
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9092,PLAINTEXT_HOST://localhost:39092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
