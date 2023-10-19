@@ -10,3 +10,4 @@ Contains docker compose and terraform configuration for a simple Distributed Tra
    - Gotchas:
      - Appears to be some sort of race condition between profile set up and trace filter configuration. Might need to run apply multiple times to succeed
      - Appears to be a bug with the trace filter subscription, must not include any wildcards upon initialization. Can be updated at a later time to include wildcards if desired
+6. Messages published to var.dt_trace_filter_subscription in variables.tf will be traced
