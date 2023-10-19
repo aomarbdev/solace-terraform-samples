@@ -11,7 +11,7 @@ Creates a Single Solace PubSub+ Event Broker and a cluster of two Kafka brokers 
 1. cd into the kafka sender directory
 2. `terraform init`
 3. `terraform apply`
-   Create kafka sender, queue with topic subscription kafka/>, will attempt to send messages to topic.1 on the Kafka brokers
+   - Creates kafka sender, queue with topic subscription kafka/>, will attempt to send messages to topic.1 on the Kafka brokers
 4. Log into the primary Kafka broker container
 5. Create the topic `kafka-topics --create --bootstrap-server kafka-1:9092 --replication-factor 2 --partitions 1 --topic topic.1`
 6. Read from the topic `kafka-console-consumer --bootstrap-server kafka-1:9092 --topic topic.1 --from-beginning`
