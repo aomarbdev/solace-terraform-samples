@@ -23,7 +23,7 @@ resource "solacebroker_msg_vpn_queue" "testing_queue" {
 
 resource "solacebroker_msg_vpn_queue_subscription" "testing_queue_subscription" {
   msg_vpn_name       = var.msg_vpn_name
-  queue_name         = var.test_queue_name
+  queue_name         = solacebroker_msg_vpn_queue.testing_queue.queue_name
   subscription_topic = var.dt_trace_filter_subscription
 }
 
@@ -46,12 +46,14 @@ resource "solacebroker_msg_vpn_client_username" "trace_client_username_1" {
   msg_vpn_name        = var.msg_vpn_name
   password            = var.dt_collector_client_password
 
+  depends_on = [solacebroker_msg_vpn_telemetry_profile.trace_telemetry_profile_1]
+
 }
 
 resource "solacebroker_msg_vpn_telemetry_profile_trace_filter" "trace_filter_1" {
   enabled                = true
   msg_vpn_name           = var.msg_vpn_name
-  telemetry_profile_name = var.dt_telemetry_profile_name
+  telemetry_profile_name = solacebroker_msg_vpn_telemetry_profile.trace_telemetry_profile_1.telemetry_profile_name
   trace_filter_name      = var.dt_trace_filter_name
 
 }
@@ -60,6 +62,6 @@ resource "solacebroker_msg_vpn_telemetry_profile_trace_filter_subscription" "tra
   msg_vpn_name           = var.msg_vpn_name
   subscription           = var.dt_trace_filter_subscription
   subscription_syntax    = "smf"
-  telemetry_profile_name = var.dt_telemetry_profile_name
-  trace_filter_name      = var.dt_trace_filter_name
+  telemetry_profile_name = solacebroker_msg_vpn_telemetry_profile.trace_telemetry_profile_1.telemetry_profile_name
+  trace_filter_name      = solacebroker_msg_vpn_telemetry_profile_trace_filter.trace_filter_1.trace_filter_name
 }

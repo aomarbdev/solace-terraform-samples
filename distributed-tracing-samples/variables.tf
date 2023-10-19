@@ -56,5 +56,5 @@ variable "dt_trace_filter_name" {
 # 20231019 unable to initialize filter with wildcard, need to initialize and then update to include wildcard
 variable "dt_trace_filter_subscription" {
   type    = string
-  default = "test/>"
+  default = ">"
 }
