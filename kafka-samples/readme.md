@@ -14,7 +14,7 @@ Creates a Single Solace PubSub+ Event Broker and a cluster of two Kafka brokers 
    Create kafka sender, queue with topic subscription kafka/>, will attempt to send messages to topic.1 on the Kafka brokers
 4. Log into the primary Kafka broker container
 5. Create the topic `kafka-topics --create --bootstrap-server kafka-1:9092 --replication-factor 2 --partitions 1 --topic topic.1`
-6. Read from teh topic `kafka-console-consumer --bootstrap-server kafka-1:9092 --topic topic.1 --from-beginning`
+6. Read from the topic `kafka-console-consumer --bootstrap-server kafka-1:9092 --topic topic.1 --from-beginning`
 
 ## Kafka Receiver Set up
 
@@ -25,3 +25,7 @@ Creates a Single Solace PubSub+ Event Broker and a cluster of two Kafka brokers 
    - Kafka receiver receives messages from kafka topic 'topic.2'
    - Maps the Kafka messages to `kafka/received/${kafkaTopic()}`
    - Messages are received by the kafka.receiver.queue queue on the Solace Broker
+4. Log into the primary Kafka broker container
+5. Create the topic `kafka-topics --create --bootstrap-server kafka-1:9092 --replication-factor 2 --partitions 1 --topic topic.2`
+6. Add messages to the topic `kafka-console-producer --bootstrap-server kafka-1:9092 --topic topic.2`
+   - Enter each message on a new line
