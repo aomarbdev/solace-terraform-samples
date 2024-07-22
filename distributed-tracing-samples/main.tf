@@ -50,6 +50,15 @@ resource "solacebroker_msg_vpn_client_username" "trace_client_username_1" {
 
 }
 
+resource "solacebroker_msg_vpn_client_username" "default_username_password" {
+  acl_profile_name    = "default"
+  client_profile_name = "default"
+  client_username     = "default"
+  enabled             = true
+  msg_vpn_name        = var.msg_vpn_name
+  password            = "default"
+}
+
 resource "solacebroker_msg_vpn_telemetry_profile_trace_filter" "trace_filter_1" {
   enabled                = true
   msg_vpn_name           = var.msg_vpn_name
